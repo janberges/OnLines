@@ -1,4 +1,4 @@
-#!/Users/jan/anaconda/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from scipy import log, linspace, sin, pi
