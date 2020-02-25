@@ -11,7 +11,7 @@ def ceil(n = 0.0, f = 1.0):
     return f * (n // f + (n / f > n // f))
 
 def round(n = 0.0, f = 1.0):
-    return f * int(n / f + 0.5 * ((n > 0) - (n < 0)))
+    return f * int(n / f + 0.5 * (float(n > 0) - float(n < 0)))
 
 def floor(n = 0.0, f = 1.0):
     return f * (n // f - (n / f < n // f))
