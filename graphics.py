@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from scipy import log, linspace, sin, pi
@@ -11,7 +11,7 @@ def ceil(n = 0.0, f = 1.0):
     return f * (n // f + (n / f > n // f))
 
 def round(n = 0.0, f = 1.0):
-    return f * int(n / f + 0.5 * cmp(n, 0))
+    return f * int(n / f + 0.5 * ((n > 0) - (n < 0)))
 
 def floor(n = 0.0, f = 1.0):
     return f * (n // f - (n / f < n // f))
@@ -287,7 +287,7 @@ def plot(
 
         for key in plot:
             if key in attributes:
-			    attributes[key].update(plot[key])
+                attributes[key].update(plot[key])
 
         for key, value in attributes.items():
             attributes[key] = ' '.join('''{}="{}"'''.format(k.replace('_', '-').lower(), v) for k, v in value.items())
