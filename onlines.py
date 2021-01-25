@@ -1,11 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
-from scipy import log, linspace, sin, pi
-from random import random
-from re import sub
-import os
-from subprocess import call
+import math
+import re
 
 def ceil(n = 0.0, f = 1.0):
     return f * (n // f + (n / f > n // f))
@@ -16,11 +12,8 @@ def round(n = 0.0, f = 1.0):
 def floor(n = 0.0, f = 1.0):
     return f * (n // f - (n / f < n // f))
 
-def lg(x):
-    return log(x) / log(10.0)
-
 def order(x):
-    return 10.0 ** floor(lg(abs(x))) if x else 1.0
+    return 10.0 ** floor(math.log10(abs(x))) if x else 1.0
 
 def round_mantissa(n = 0.0, f = 1.0):
     return round(n, f * order(n))
@@ -199,12 +192,12 @@ def plot(
     y_to_v = lambda y: v_per_y * (y - y_min) + bottom
 
     def format(x):
-        x = sub(r'<(.+?)>\{', r"<tspan fill='\1'>", x)
+        x = re.sub(r'<(.+?)>\{', r"<tspan fill='\1'>", x)
         x = x.replace('[', "<tspan style='font-style: italic'>")
         x = x.replace('^{', "<tspan baseline-shift='super' style='font-size: {}px'>".format(0.75 * font_size))
         x = x.replace('_{', "<tspan baseline-shift='sub' dominant-baseline='mathematical' style='font-size: {}px'>".format(0.75 * font_size))
         x = x.replace('{', "<tspan style='font-weight: bold'>".format(+baseline_shift, 0.75 * font_size))
-        x = sub(r'\}|\]', r"</tspan>", x)
+        x = re.sub(r'\}|\]', r"</tspan>", x)
         x = x.replace('--', '&#8722;')
         x = x.replace('_', '&#8201;')
         return x
