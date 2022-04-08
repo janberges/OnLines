@@ -330,16 +330,19 @@ def plot(
             legend_top += line_height
 
         if 'circle' in plot:
-            for h, v in zip(H, V):
-                svg += "<circle cx='{h}' cy='{v}' {attributes[circle]} />".format(**vars())
+            for h, v, txt in zip(H, V, TXT):
+                svg += "<circle cx='{h}' cy='{v}' {attributes[circle]}".format(**vars())
+                svg += "><title>{0}</title></circle>".format(txt) if txt else " />"
 
         if 'ellipse' in plot:
-            for h, v, dh, dv in zip(H, V, DH, DV):
-                svg += "<ellipse cx='{h}' cy='{v}' rx='{dh}' ry='{dv}' {attributes[ellipse]} />".format(**vars())
+            for h, v, dh, dv, txt in zip(H, V, DH, DV, TXT):
+                svg += "<ellipse cx='{h}' cy='{v}' rx='{dh}' ry='{dv}' {attributes[ellipse]}".format(**vars())
+                svg += "><title>{0}</title></ellipse>".format(txt) if txt else " />"
 
         if 'bar' in plot:
-            for h, v, dh, dv in zip(H, V, DH, DV):
-                svg += "<path d='M {0} {1} h {2} v {3} h {4} Z' {attributes[bar]} />".format(h + dh, v + dv, -2 * dh or h_ref - h, -2 * dv or v_ref - v, 2 * dh or h - h_ref, **vars())
+            for h, v, dh, dv, txt in zip(H, V, DH, DV, TXT):
+                svg += "<path d='M {0} {1} h {2} v {3} h {4} Z' {attributes[bar]}".format(h + dh, v + dv, -2 * dh or h_ref - h, -2 * dv or v_ref - v, 2 * dh or h - h_ref, **vars())
+                svg += "><title>{0}</title></path>".format(txt) if txt else " />"
 
         if 'cross' in plot:
             svg += "<g {attributes[cross]}>".format(**vars())
