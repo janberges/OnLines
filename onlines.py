@@ -125,7 +125,7 @@ def plot(
     dx = x_max - x_min or 1.0
     dy = y_max - y_min or 1.0
 
-    defs += "<path id='wave' d='M -{0} 0 C 0 -{font_size} 0 {font_size} {0} 0' /><marker id='arrow' viewBox='-{marker_size} -{marker_size} {1} {1}' markerWidth='{1}' markerHeight='{1}' orient='auto'><path fill='{fill}' stroke='{stroke}' stroke_width='1' d='M -{marker_size} -{marker_size} l {marker_size} {marker_size} l -{marker_size} {marker_size}' /></marker>".format(0.5 * font_size, 2.0 * marker_size, **vars())
+    defs += "<path id='wave' d='M -{0} 0 C 0 -{font_size} 0 {font_size} {0} 0' /><marker id='arrow' viewBox='-{marker_size} -{marker_size} {1} {1}' markerWidth='{1}' markerHeight='{1}' orient='auto'><path fill='{fill}' stroke='{stroke}' stroke-width='1' d='M -{marker_size} -{marker_size} l {marker_size} {marker_size} l -{marker_size} {marker_size}' /></marker>".format(0.5 * font_size, 2.0 * marker_size, **vars())
 
     baseline_shift *= font_size
     line_height *= font_size
