@@ -3,6 +3,8 @@
 import math
 import re
 
+__version__ = '2021.1'
+
 def ceil(n = 0.0, f = 1.0):
     return f * (n // f + (n / f > n // f))
 
