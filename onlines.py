@@ -127,7 +127,11 @@ def plot(
     dx = x_max - x_min or 1.0
     dy = y_max - y_min or 1.0
 
-    defs += "<path id='{name}_wave' d='M -{0} 0 C 0 -{font_size} 0 {font_size} {0} 0' /><marker id='{name}_arrow' viewBox='-{marker_size} -{marker_size} {1} {1}' markerWidth='{1}' markerHeight='{1}' orient='auto'><path fill='{fill}' stroke='{stroke}' stroke-width='1' d='M -{marker_size} -{marker_size} l {marker_size} {marker_size} l -{marker_size} {marker_size}' /></marker>".format(0.5 * font_size, 2.0 * marker_size, **vars())
+    identifier = re.sub(r'/', '_', name)
+    identifier = re.sub(r'[^A-Za-z_0-9-]*', '', identifier)
+    identifier = re.sub(r'^[0-9-]*', '', identifier)
+
+    defs += "<path id='{identifier}_wave' d='M -{0} 0 C 0 -{font_size} 0 {font_size} {0} 0' /><marker id='{identifier}_arrow' viewBox='-{marker_size} -{marker_size} {1} {1}' markerWidth='{1}' markerHeight='{1}' orient='auto'><path fill='{fill}' stroke='{stroke}' stroke-width='1' d='M -{marker_size} -{marker_size} l {marker_size} {marker_size} l -{marker_size} {marker_size}' /></marker>".format(0.5 * font_size, 2.0 * marker_size, **vars())
 
     baseline_shift *= font_size
     line_height *= font_size
@@ -206,7 +210,7 @@ def plot(
 
     text = "style='font-family: {font_family}; font-size: {font_size}px; line-height: {line_height}px' dy='{baseline_shift}'".format(**vars())
 
-    svg = "<svg id='{name}' width='{width}' height='{height}' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1'><defs>".format(**vars())
+    svg = "<svg id='{identifier}' width='{width}' height='{height}' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1'><defs>".format(**vars())
 
     svg += defs.format(**vars())
 
@@ -324,10 +328,10 @@ def plot(
             svg += "<text {text} x='{legend_left}' y='{legend_top}' dx='{line_height}' text-anchor='start'>{plot[legend]}</text>".format(**vars())
 
             if 'line' in plot:
-                svg += "<use xlink:href='#{name}_wave' x='{0}' y='{1}' {attributes[line]} />".format(H[-1], V[-1], **vars())
+                svg += "<use xlink:href='#{identifier}_wave' x='{0}' y='{1}' {attributes[line]} />".format(H[-1], V[-1], **vars())
 
             if 'quadratic' in plot:
-                svg += "<use xlink:href='#{name}_wave' x='{0}' y='{1}' {attributes[line]} />".format(H[-1], V[-1], **vars())
+                svg += "<use xlink:href='#{identifier}_wave' x='{0}' y='{1}' {attributes[line]} />".format(H[-1], V[-1], **vars())
 
             legend_top += line_height
 
@@ -400,7 +404,7 @@ def plot(
         for y in y_ticks:
             svg += "<path d='M {left} {y} h -{marker_size} 0' />".format(**vars())
 
-        svg += "<path d='M {left} {bottom} h {0}' marker-end='url(#{name}_arrow)' /><path d='M {left} {bottom} v {1}' marker-end='url(#{name}_arrow)' /></g>".format(inner_width + 2 * marker_size, -2 * marker_size - inner_height, right + marker_size, bottom - marker_size, left - marker_size, top - marker_size, **vars())
+        svg += "<path d='M {left} {bottom} h {0}' marker-end='url(#{identifier}_arrow)' /><path d='M {left} {bottom} v {1}' marker-end='url(#{identifier}_arrow)' /></g>".format(inner_width + 2 * marker_size, -2 * marker_size - inner_height, right + marker_size, bottom - marker_size, left - marker_size, top - marker_size, **vars())
 
     svg += after.format(**vars())
 
