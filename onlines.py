@@ -105,16 +105,20 @@ def plot(
             plot[key] = [plot[key][_ % len(plot[key])] for _ in range(n)]
 
     if x_min is None:
-        x_min = min(x - abs(dx) for _ in plots for x, dx in zip(_['x'], _['dx']))
+        x_min = min(x - abs(dx)
+            for _ in plots for x, dx in zip(_['x'], _['dx']))
 
     if x_max is None:
-        x_max = max(x + abs(dx) for _ in plots for x, dx in zip(_['x'], _['dx']))
+        x_max = max(x + abs(dx)
+            for _ in plots for x, dx in zip(_['x'], _['dx']))
 
     if y_min is None:
-        y_min = min(y - abs(dy) for _ in plots for y, dy in zip(_['y'], _['dy']))
+        y_min = min(y - abs(dy)
+            for _ in plots for y, dy in zip(_['y'], _['dy']))
 
     if y_max is None:
-        y_max = max(y + abs(dy) for _ in plots for y, dy in zip(_['y'], _['dy']))
+        y_max = max(y + abs(dy)
+            for _ in plots for y, dy in zip(_['y'], _['dy']))
 
     if x_ref is not None:
         x_min = min(x_min, x_ref)
@@ -131,7 +135,16 @@ def plot(
     identifier = re.sub(r'[^A-Za-z_0-9-]*', '', identifier)
     identifier = re.sub(r'^[0-9-]*', '', identifier)
 
-    defs += "<path id='{identifier}_wave' d='M -{0} 0 C 0 -{font_size} 0 {font_size} {0} 0' /><marker id='{identifier}_arrow' viewBox='-{marker_size} -{marker_size} {1} {1}' markerWidth='{1}' markerHeight='{1}' orient='auto'><path fill='{fill}' stroke='{stroke}' stroke-width='1' d='M -{marker_size} -{marker_size} l {marker_size} {marker_size} l -{marker_size} {marker_size}' /></marker>".format(0.5 * font_size, 2.0 * marker_size, **vars())
+    defs += ("<path id='{identifier}_wave' "
+            "d='M -{0} 0 C 0 -{font_size} 0 {font_size} {0} 0' />"
+        "<marker id='{identifier}_arrow' "
+            "viewBox='-{marker_size} -{marker_size} {1} {1}' "
+            "markerWidth='{1}' markerHeight='{1}' orient='auto'>"
+            "<path fill='{fill}' stroke='{stroke}' stroke-width='1' "
+                "d='M -{marker_size} -{marker_size} "
+                    'l {marker_size} {marker_size} '
+                    "l -{marker_size} {marker_size}' />"
+        '</marker>').format(0.5 * font_size, 2.0 * marker_size, **vars())
 
     baseline_shift *= font_size
     line_height *= font_size
@@ -200,17 +213,27 @@ def plot(
     def format(x):
         x = re.sub(r'<(.+?)>\{', r"<tspan fill='\1'>", x)
         x = x.replace('[', "<tspan style='font-style: italic'>")
-        x = x.replace('^{', "<tspan baseline-shift='super' style='font-size: {}px'>".format(0.75 * font_size))
-        x = x.replace('_{', "<tspan baseline-shift='sub' dominant-baseline='mathematical' style='font-size: {}px'>".format(0.75 * font_size))
-        x = x.replace('{', "<tspan style='font-weight: bold'>".format(+baseline_shift, 0.75 * font_size))
+        x = x.replace('^{', "<tspan baseline-shift='super' "
+            "style='font-size: {}px'>".format(0.75 * font_size))
+        x = x.replace('_{', "<tspan baseline-shift='sub' "
+            "dominant-baseline='mathematical' "
+            "style='font-size: {}px'>".format(0.75 * font_size))
+        x = x.replace('{', "<tspan style='font-weight: bold'>".format(
+            baseline_shift, 0.75 * font_size))
         x = re.sub(r'\}|\]', r'</tspan>', x)
         x = x.replace('--', '&#8722;')
         x = x.replace('_', '&#8201;')
         return x
 
-    text = "style='font-family: {font_family}; font-size: {font_size}px; line-height: {line_height}px' dy='{baseline_shift}'".format(**vars())
+    text = ("style='font-family: {font_family}; "
+        'font-size: {font_size}px; '
+        "line-height: {line_height}px' "
+        "dy='{baseline_shift}'").format(**vars())
 
-    svg = "<svg id='{identifier}' width='{width}' height='{height}' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1'><defs>".format(**vars())
+    svg = ("<svg id='{identifier}' width='{width}' height='{height}' "
+        "xmlns='http://www.w3.org/2000/svg' "
+        "xmlns:xlink='http://www.w3.org/1999/xlink' "
+        "version='1.1'><defs>").format(**vars())
 
     svg += defs.format(**vars())
 
@@ -219,23 +242,31 @@ def plot(
     svg += before.format(**vars())
 
     if background_image:
-        svg += "<image x='{left}' y='{top}' width='{inner_width}' height='{inner_height}' xlink:href='{background_image}' />".format(**vars())
+        svg += ("<image x='{left}' y='{top}' "
+            "width='{inner_width}' height='{inner_height}' "
+            "xlink:href='{background_image}' />").format(**vars())
 
     h_ref = x_to_h(x_ref) if x_ref is not None else left
     v_ref = y_to_v(y_ref) if y_ref is not None else bottom
 
     if abs(h_ref - left) > 1:
-        svg += "<path d='M {h_ref} {bottom} L {h_ref} {top}' stroke='#888' stroke-width='{stroke_width}' stroke-dasharray='3 3' />".format(**vars())
+        svg += ("<path d='M {h_ref} {bottom} L {h_ref} {top}' "
+            "stroke='#888' stroke-width='{stroke_width}' "
+            "stroke-dasharray='3 3' />").format(**vars())
 
     if abs(v_ref - bottom) > 1:
-        svg += "<path d='M {left} {v_ref} L {right} {v_ref}' stroke='#888' stroke-width='{stroke_width}' stroke-dasharray='3 3' />".format(**vars())
+        svg += ("<path d='M {left} {v_ref} L {right} {v_ref}' "
+            "stroke='#888' stroke-width='{stroke_width}' "
+            "stroke-dasharray='3 3' />").format(**vars())
 
     if legend is not None:
         legend = format(legend)
-        svg += "<text {text} x='{legend_left}' y='{legend_top}' text-anchor='start'>{legend}</text>".format(**vars())
+        svg += ("<text {text} x='{legend_left}' y='{legend_top}' "
+            "text-anchor='start'>{legend}</text>").format(**vars())
         legend_top += line_height
 
-    colors = ['blue', 'green', 'red', 'orange', 'turquoise', 'purple', 'black', 'grey']
+    colors = ['blue', 'green', 'red', 'orange',
+        'turquoise', 'purple', 'black', 'grey']
 
     for plot in plots:
         attributes = dict(
@@ -289,7 +320,8 @@ def plot(
                 attributes[key].update(plot[key])
 
         for key, value in attributes.items():
-            attributes[key] = ' '.join('''{}="{}"'''.format(k.replace('_', '-').lower(), v) for k, v in value.items())
+            attributes[key] = ' '.join('''{}="{}"'''.format(
+                k.replace('_', '-').lower(), v) for k, v in value.items())
 
         H = [x_to_h(x) for x in plot['x']]
         V = [y_to_v(y) for y in plot['y']]
@@ -308,13 +340,19 @@ def plot(
                 H1 = H
                 V1 = V
 
-            svg += "<polyline points='{0}' {attributes[line]} />".format(' '.join(str(_) for _ in zip(H1, V1) for _ in _), **vars())
+            svg += ("<polyline points='{0}' "
+                '{attributes[line]} />').format(' '.join(str(_)
+                    for _ in zip(H1, V1) for _ in _), **vars())
 
         if 'quadratic' in plot:
-            svg += "<path d='M {H[0]} {V[0]} Q {0}' {attributes[quadratic]} />".format(' '.join(str(_) for _ in zip(H[1:], V[1:]) for _ in _), **vars())
+            svg += ("<path d='M {H[0]} {V[0]} Q {0}' "
+                '{attributes[quadratic]} />').format(' '.join(str(_)
+                    for _ in zip(H[1:], V[1:]) for _ in _), **vars())
 
         if 'smooth' in plot:
-            svg += "<path d='M {H[0]} {V[0]} S {0}' {attributes[smooth]} />".format(' '.join(str(_) for _ in zip(H[1:], V[1:]) for _ in _), **vars())
+            svg += ("<path d='M {H[0]} {V[0]} S {0}' "
+                '{attributes[smooth]} />').format(' '.join(str(_)
+                    for _ in zip(H[1:], V[1:]) for _ in _), **vars())
 
         if 'legend' in plot:
             H.append(legend_left + 0.5 * font_size)
@@ -325,45 +363,66 @@ def plot(
 
             plot['legend'] = format(plot['legend'])
 
-            svg += "<text {text} x='{legend_left}' y='{legend_top}' dx='{line_height}' text-anchor='start'>{plot[legend]}</text>".format(**vars())
+            svg += ("<text {text} x='{legend_left}' y='{legend_top}' "
+                "dx='{line_height}' text-anchor='start'>"
+                    '{plot[legend]}</text>').format(**vars())
 
             if 'line' in plot:
-                svg += "<use xlink:href='#{identifier}_wave' x='{0}' y='{1}' {attributes[line]} />".format(H[-1], V[-1], **vars())
+                svg += ("<use xlink:href='#{identifier}_wave' x='{0}' y='{1}' "
+                    '{attributes[line]} />').format(H[-1], V[-1], **vars())
 
             if 'quadratic' in plot:
-                svg += "<use xlink:href='#{identifier}_wave' x='{0}' y='{1}' {attributes[line]} />".format(H[-1], V[-1], **vars())
+                svg += ("<use xlink:href='#{identifier}_wave' x='{0}' y='{1}' "
+                    '{attributes[line]} />').format(H[-1], V[-1], **vars())
 
             legend_top += line_height
 
         if 'circle' in plot:
             for h, v, txt in zip(H, V, TXT):
-                svg += "<circle cx='{h}' cy='{v}' {attributes[circle]}".format(**vars())
-                svg += '><title>{0}</title></circle>'.format(txt) if txt else ' />'
+                svg += "<circle cx='{h}' cy='{v}' {attributes[circle]}".format(
+                    **vars())
+                svg += ('><title>{0}</title></circle>'.format(txt)
+                    if txt else ' />')
 
         if 'ellipse' in plot:
             for h, v, dh, dv, txt in zip(H, V, DH, DV, TXT):
-                svg += "<ellipse cx='{h}' cy='{v}' rx='{dh}' ry='{dv}' {attributes[ellipse]}".format(**vars())
-                svg += '><title>{0}</title></ellipse>'.format(txt) if txt else ' />'
+                svg += ("<ellipse cx='{h}' cy='{v}' rx='{dh}' ry='{dv}' "
+                    '{attributes[ellipse]}').format(**vars())
+                svg += ('><title>{0}</title></ellipse>'.format(txt)
+                    if txt else ' />')
 
         if 'bar' in plot:
             for h, v, dh, dv, txt in zip(H, V, DH, DV, TXT):
-                svg += "<path d='M {0} {1} h {2} v {3} h {4} Z' {attributes[bar]}".format(h + dh, v + dv, -2 * dh or h_ref - h, -2 * dv or v_ref - v, 2 * dh or h - h_ref, **vars())
-                svg += '><title>{0}</title></path>'.format(txt) if txt else ' />'
+                svg += ("<path d='M {0} {1} h {2} v {3} h {4} Z' "
+                    '{attributes[bar]}').format(h + dh, v + dv,
+                        -2 * dh or h_ref - h,
+                        -2 * dv or v_ref - v,
+                        2 * dh or h - h_ref, **vars())
+                svg += ('><title>{0}</title></path>'.format(txt)
+                    if txt else ' />')
 
         if 'cross' in plot:
             svg += '<g {attributes[cross]}>'.format(**vars())
 
             for h, v, dh, dv in zip(H, V, DH, DV):
                 if dh:
-                    svg += "<path d='M {0} {v} L {1} {v}' /><path d='M {0} {2} v {marker_size}' /><path d='M {1} {2} v {marker_size}' />".format(h - dh, h + dh, v - 0.5 * marker_size, **vars())
+                    svg += ("<path d='M {0} {v} L {1} {v}' />"
+                        "<path d='M {0} {2} v {marker_size}' />"
+                        "<path d='M {1} {2} v {marker_size}' />").format(
+                            h - dh, h + dh, v - 0.5 * marker_size, **vars())
                 if dv:
-                    svg += "<path d='M {h} {0} L {h} {1}' /><path d='M {2} {0} h {marker_size}' /><path d='M {2} {1} h {marker_size}' />".format(v - dv, v + dv, h - 0.5 * marker_size, **vars())
+                    svg += ("<path d='M {h} {0} L {h} {1}' />"
+                        "<path d='M {2} {0} h {marker_size}' />"
+                        "<path d='M {2} {1} h {marker_size}' />").format(
+                            v - dv, v + dv, h - 0.5 * marker_size, **vars())
 
             svg += '</g>'
 
         if 'text' in plot:
             for h, v, txt in zip(H, V, TXT):
-                svg += "<g transform='translate({h}, {v})'><text {attributes[text]}>{txt}</text></g>".format(**vars())
+                svg += ("<g transform='translate({h}, {v})'>"
+                        '<text {attributes[text]}>{txt}</text>'
+                    '</g>').format(**vars())
 
     if axes:
         if x_ticks is None:
@@ -384,27 +443,52 @@ def plot(
         if type(y_ticks) is not dict:
             y_ticks = dict(zip(y_ticks, map(nice, y_ticks)))
 
-        x_ticks = dict((x_to_h(key), format(value)) for key, value in x_ticks.items())
-        y_ticks = dict((y_to_v(key), format(value)) for key, value in y_ticks.items())
+        x_ticks = dict((x_to_h(key), format(value))
+            for key, value in x_ticks.items())
+
+        y_ticks = dict((y_to_v(key), format(value))
+            for key, value in y_ticks.items())
 
         for x, label in x_ticks.items():
-            svg += "<text {text} x='{x}' y='{0}' text-anchor='middle'>{label}</text>".format(bottom + marker_size + 0.5 * line_height, **vars())
+            svg += ("<text {text} x='{x}' y='{0}' text-anchor='middle'>{label}"
+                '</text>').format(bottom + marker_size + 0.5 * line_height,
+                    **vars())
 
         for y, label in y_ticks.items():
-            svg += "<text {text} text-anchor='middle' transform='translate({0} {y}) rotate(-90)'>{label}</text>".format(left - marker_size - 0.5 * line_height, **vars())
+            svg += ("<text {text} text-anchor='middle' "
+                    "transform='translate({0} {y}) rotate(-90)'>{label}"
+                '</text>').format(left - marker_size - 0.5 * line_height,
+                    **vars())
 
         x_label = format(x_label)
         y_label = format(y_label)
 
-        svg += "<text {text} x='{0}' y='{1}' text-anchor='middle'>{x_label}</text><text {text} text-anchor='middle' transform='translate({2} {3}) rotate(-90)'>{y_label}</text><g stroke='{stroke}' stroke-width='{stroke_width}'>".format(left + 0.5 * inner_width, bottom + x_label_spacing + 0.5 * line_height, left - y_label_spacing - 0.5 * line_height, top + 0.5 * inner_height, **vars())
+        svg += ("<text {text} x='{0}' y='{1}' text-anchor='middle'>"
+                '{x_label}</text>'
+            "<text {text} text-anchor='middle' "
+                "transform='translate({2} {3}) rotate(-90)'>{y_label}</text>"
+            "<g stroke='{stroke}' stroke-width='{stroke_width}'>").format(
+                left + 0.5 * inner_width,
+                bottom + x_label_spacing + 0.5 * line_height,
+                left - y_label_spacing - 0.5 * line_height,
+                top + 0.5 * inner_height, **vars())
 
         for x in x_ticks:
-            svg += "<path d='M {x} {bottom} v {marker_size}' />".format(**vars())
+            svg += "<path d='M {x} {bottom} v {marker_size}' />".format(
+                **vars())
 
         for y in y_ticks:
-            svg += "<path d='M {left} {y} h -{marker_size} 0' />".format(**vars())
+            svg += "<path d='M {left} {y} h -{marker_size} 0' />".format(
+                **vars())
 
-        svg += "<path d='M {left} {bottom} h {0}' marker-end='url(#{identifier}_arrow)' /><path d='M {left} {bottom} v {1}' marker-end='url(#{identifier}_arrow)' /></g>".format(inner_width + 2 * marker_size, -2 * marker_size - inner_height, right + marker_size, bottom - marker_size, left - marker_size, top - marker_size, **vars())
+        svg += ("<path d='M {left} {bottom} h {0}' "
+                "marker-end='url(#{identifier}_arrow)' />"
+            "<path d='M {left} {bottom} v {1}' "
+                "marker-end='url(#{identifier}_arrow)' />"
+            '</g>').format(inner_width + 2 * marker_size,
+                -2 * marker_size - inner_height,
+                right + marker_size, bottom - marker_size,
+                left - marker_size, top - marker_size, **vars())
 
     svg += after.format(**vars())
 
