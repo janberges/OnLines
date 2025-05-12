@@ -76,8 +76,8 @@ def plot(
     stroke='black',
     stroke_width=0.5,
 
-    plots=[]):
-
+    plots=[],
+):
     standard = dict(
         x=[0],
         y=[0],
@@ -95,7 +95,7 @@ def plot(
 
             try:
                 plot[key][0]
-            except:
+            except TypeError:
                 plot[key] = [plot[key]]
 
             if len(plot[key]) > n:
@@ -207,8 +207,11 @@ def plot(
 
     legend_top += 0.5 * line_height
 
-    x_to_h = lambda x: h_per_x * (x - x_min) + left
-    y_to_v = lambda y: v_per_y * (y - y_min) + bottom
+    def x_to_h(x):
+        return h_per_x * (x - x_min) + left
+
+    def y_to_v(y):
+        return v_per_y * (y - y_min) + bottom
 
     def format(x):
         x = re.sub(r'<(.+?)>\{', r"<tspan fill='\1'>", x)
@@ -218,8 +221,7 @@ def plot(
         x = x.replace('_{', "<tspan baseline-shift='sub' "
             "dominant-baseline='mathematical' "
             "style='font-size: {}px'>".format(0.75 * font_size))
-        x = x.replace('{', "<tspan style='font-weight: bold'>".format(
-            baseline_shift, 0.75 * font_size))
+        x = x.replace('{', "<tspan style='font-weight: bold'>")
         x = re.sub(r'\}|\]', r'</tspan>', x)
         x = x.replace('--', '&#8722;')
         x = x.replace('_', '&#8201;')
@@ -435,7 +437,8 @@ def plot(
                 y_tick_interval = abs(round_mantissa(y_tick_spacing / v_per_y))
             y_ticks = multiples(y_min, y_max, y_tick_interval)
 
-        nice = lambda x: '{0:g}'.format(x).replace('-', '&#8722;')
+        def nice(x):
+            return '{0:g}'.format(x).replace('-', '&#8722;')
 
         if type(x_ticks) is not dict:
             x_ticks = dict(zip(x_ticks, map(nice, x_ticks)))
