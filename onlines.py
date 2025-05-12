@@ -5,86 +5,86 @@ import re
 
 __version__ = '2021.1'
 
-def ceil(n = 0.0, f = 1.0):
+def ceil(n=0.0, f=1.0):
     return f * (n // f + (n / f > n // f))
 
-def round(n = 0.0, f = 1.0):
+def round(n=0.0, f=1.0):
     return f * int(n / f + 0.5 * (float(n > 0) - float(n < 0)))
 
-def floor(n = 0.0, f = 1.0):
+def floor(n=0.0, f=1.0):
     return f * (n // f - (n / f < n // f))
 
 def order(x):
     return 10.0 ** floor(math.log10(abs(x))) if x else 1.0
 
-def round_mantissa(n = 0.0, f = 1.0):
+def round_mantissa(n=0.0, f=1.0):
     return round(n, f * order(n))
 
-def multiples(min = 0.0, max = 0.0, f = 1.0):
+def multiples(min=0.0, max=0.0, f=1.0):
     return [_ * f for _ in range(int(ceil(min / f)), int(floor(max / f) + 1))]
 
 def plot(
-    name = 'untitled',
-    save = False,
+    name='untitled',
+    save=False,
 
-    x_label = 'x',
-    y_label = 'y',
-    legend = None,
+    x_label='x',
+    y_label='y',
+    legend=None,
 
-    background_image = None,
+    background_image=None,
 
-    font_family = 'Sans, sans-serif',
-    font_size = 9.0,
-    line_height = 1.4,
-    baseline_shift = 1.0 / 3,
+    font_family='Sans, sans-serif',
+    font_size=9.0,
+    line_height=1.4,
+    baseline_shift=1.0 / 3,
 
-    width = 700.0,
-    height = 500.0,
+    width=700.0,
+    height=500.0,
 
-    margin = None,
-    margin_left = None,
-    margin_right = None,
-    margin_bottom = None,
-    margin_top = None,
+    margin=None,
+    margin_left=None,
+    margin_right=None,
+    margin_bottom=None,
+    margin_top=None,
 
-    legend_left = None,
-    legend_top = None,
+    legend_left=None,
+    legend_top=None,
 
-    x_ref = None,
-    y_ref = None,
-    x_min = None,
-    x_max = None,
-    y_min = None,
-    y_max = None,
+    x_ref=None,
+    y_ref=None,
+    x_min=None,
+    x_max=None,
+    y_min=None,
+    y_max=None,
 
-    x_tick_spacing = 80.0,
-    y_tick_spacing = 80.0,
-    x_tick_interval = None,
-    y_tick_interval = None,
-    x_ticks = None,
-    y_ticks = None,
+    x_tick_spacing=80.0,
+    y_tick_spacing=80.0,
+    x_tick_interval=None,
+    y_tick_interval=None,
+    x_ticks=None,
+    y_ticks=None,
 
-    marker_size = 6.0,
+    marker_size=6.0,
 
-    defs = '',
-    before = '',
-    after = '',
+    defs='',
+    before='',
+    after='',
 
-    axes = True,
+    axes=True,
 
-    fill = 'none',
-    stroke = 'black',
-    stroke_width = 0.5,
+    fill='none',
+    stroke='black',
+    stroke_width=0.5,
 
-    plots = []):
+    plots=[]):
 
     standard = dict(
-        x = [0],
-        y = [0],
-        dx = [0],
-        dy = [0],
-        txt = [''],
-        )
+        x=[0],
+        y=[0],
+        dx=[0],
+        dy=[0],
+        txt=[''],
+    )
 
     for plot in plots:
         n = 1
@@ -203,7 +203,7 @@ def plot(
         x = x.replace('^{', "<tspan baseline-shift='super' style='font-size: {}px'>".format(0.75 * font_size))
         x = x.replace('_{', "<tspan baseline-shift='sub' dominant-baseline='mathematical' style='font-size: {}px'>".format(0.75 * font_size))
         x = x.replace('{', "<tspan style='font-weight: bold'>".format(+baseline_shift, 0.75 * font_size))
-        x = re.sub(r'\}|\]', r"</tspan>", x)
+        x = re.sub(r'\}|\]', r'</tspan>', x)
         x = x.replace('--', '&#8722;')
         x = x.replace('_', '&#8201;')
         return x
@@ -214,7 +214,7 @@ def plot(
 
     svg += defs.format(**vars())
 
-    svg += "</defs>"
+    svg += '</defs>'
 
     svg += before.format(**vars())
 
@@ -239,48 +239,48 @@ def plot(
 
     for plot in plots:
         attributes = dict(
-            line = dict(
-                fill = 'none',
-                stroke = colors[0],
-                stroke_width = stroke_width,
-                ),
-            circle = dict(
-                fill = colors[0],
-                stroke_width = stroke_width,
-                r = 0.5 * marker_size,
-                ),
-            ellipse = dict(
-                fill = 'none',
-                stroke = stroke,
-                stroke_width = stroke_width,
-                stroke_dasharray = '3 2',
-                ),
-            bar = dict(
-                fill = colors[0],
-                stroke = stroke,
-                stroke_width = stroke_width,
-                ),
-            cross = dict(
-                stroke = colors[0],
-                stroke_width = stroke_width,
-                ),
-            text = dict(
-                font_family = font_family,
-                font_size = font_size,
-                line_height = line_height,
-                text_anchor = 'middle',
-                ),
-            quadratic = dict(
-                fill = 'none',
-                stroke = colors[0],
-                stroke_width = stroke_width,
-                ),
-            smooth = dict(
-                fill = 'none',
-                stroke = colors[0],
-                stroke_width = stroke_width,
-                )
+            line=dict(
+                fill='none',
+                stroke=colors[0],
+                stroke_width=stroke_width,
+            ),
+            circle=dict(
+                fill=colors[0],
+                stroke_width=stroke_width,
+                r=0.5 * marker_size,
+            ),
+            ellipse=dict(
+                fill='none',
+                stroke=stroke,
+                stroke_width=stroke_width,
+                stroke_dasharray='3 2',
+            ),
+            bar=dict(
+                fill=colors[0],
+                stroke=stroke,
+                stroke_width=stroke_width,
+            ),
+            cross=dict(
+                stroke=colors[0],
+                stroke_width=stroke_width,
+            ),
+            text=dict(
+                font_family=font_family,
+                font_size=font_size,
+                line_height=line_height,
+                text_anchor='middle',
+            ),
+            quadratic=dict(
+                fill='none',
+                stroke=colors[0],
+                stroke_width=stroke_width,
+            ),
+            smooth=dict(
+                fill='none',
+                stroke=colors[0],
+                stroke_width=stroke_width,
             )
+        )
 
         colors = colors[1:] + colors[:1]
 
@@ -291,11 +291,11 @@ def plot(
         for key, value in attributes.items():
             attributes[key] = ' '.join('''{}="{}"'''.format(k.replace('_', '-').lower(), v) for k, v in value.items())
 
-        H   = [x_to_h(x)     for x   in plot['x'  ]]
-        V   = [y_to_v(y)     for y   in plot['y'  ]]
-        DH  = [h_per_x * dx  for dx  in plot['dx' ]]
-        DV  = [-v_per_y * dy for dy  in plot['dy' ]]
-        TXT = [format(txt)   for txt in plot['txt']]
+        H = [x_to_h(x) for x in plot['x']]
+        V = [y_to_v(y) for y in plot['y']]
+        DH = [h_per_x * dx for dx in plot['dx']]
+        DV = [-v_per_y * dy for dy in plot['dy']]
+        TXT = [format(txt) for txt in plot['txt']]
 
         if 'line' in plot:
             if x_ref is not None:
@@ -338,20 +338,20 @@ def plot(
         if 'circle' in plot:
             for h, v, txt in zip(H, V, TXT):
                 svg += "<circle cx='{h}' cy='{v}' {attributes[circle]}".format(**vars())
-                svg += "><title>{0}</title></circle>".format(txt) if txt else " />"
+                svg += '><title>{0}</title></circle>'.format(txt) if txt else ' />'
 
         if 'ellipse' in plot:
             for h, v, dh, dv, txt in zip(H, V, DH, DV, TXT):
                 svg += "<ellipse cx='{h}' cy='{v}' rx='{dh}' ry='{dv}' {attributes[ellipse]}".format(**vars())
-                svg += "><title>{0}</title></ellipse>".format(txt) if txt else " />"
+                svg += '><title>{0}</title></ellipse>'.format(txt) if txt else ' />'
 
         if 'bar' in plot:
             for h, v, dh, dv, txt in zip(H, V, DH, DV, TXT):
                 svg += "<path d='M {0} {1} h {2} v {3} h {4} Z' {attributes[bar]}".format(h + dh, v + dv, -2 * dh or h_ref - h, -2 * dv or v_ref - v, 2 * dh or h - h_ref, **vars())
-                svg += "><title>{0}</title></path>".format(txt) if txt else " />"
+                svg += '><title>{0}</title></path>'.format(txt) if txt else ' />'
 
         if 'cross' in plot:
-            svg += "<g {attributes[cross]}>".format(**vars())
+            svg += '<g {attributes[cross]}>'.format(**vars())
 
             for h, v, dh, dv in zip(H, V, DH, DV):
                 if dh:
@@ -359,7 +359,7 @@ def plot(
                 if dv:
                     svg += "<path d='M {h} {0} L {h} {1}' /><path d='M {2} {0} h {marker_size}' /><path d='M {2} {1} h {marker_size}' />".format(v - dv, v + dv, h - 0.5 * marker_size, **vars())
 
-            svg += "</g>"
+            svg += '</g>'
 
         if 'text' in plot:
             for h, v, txt in zip(H, V, TXT):
