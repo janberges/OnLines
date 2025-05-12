@@ -95,7 +95,7 @@ def plot(
 
             try:
                 plot[key][0]
-            except TypeError:
+            except (TypeError, IndexError):
                 plot[key] = [plot[key]]
 
             if len(plot[key]) > n:
